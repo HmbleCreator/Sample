@@ -1,14 +1,27 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Enable React Strict Mode for better development experience
+  reactStrictMode: true,
+  
+  // Image optimization configuration
   images: {
     domains: ['lh3.googleusercontent.com'], // For Auth0 profile images
-    unoptimized: false,
+    unoptimized: process.env.NODE_ENV === 'production' ? false : true,
   },
+  
   // Vercel optimizations
   swcMinify: true,
   compress: true,
   poweredByHeader: false,
   generateEtags: false,
+  
+  // Enable server components
+  experimental: {
+    serverComponentsExternalPackages: ['@auth0/nextjs-auth0'],
+  },
+  
+  // Output standalone for better Vercel compatibility
+  output: 'standalone',
   // Environment variables validation
   env: {},
   // Headers for security

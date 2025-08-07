@@ -1,0 +1,28 @@
+# Use a slim production-ready Node image
+FROM node:18-alpine AS builder
+
+# Set working directory
+WORKDIR /app
+
+# Install dependencies
+COPY package*.json ./
+RUN npm install
+
+# Copy all files
+COPY . .
+
+# Build the Next.js app
+RUN npm run build
+
+# Production image
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY --from=builder /app ./
+
+EXPOSE 3000
+
+ENV NODE_ENV=production
+
+CMD ["npm", "start"]

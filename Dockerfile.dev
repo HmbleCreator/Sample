@@ -1,0 +1,20 @@
+# Use the official Node.js image as the base image
+FROM node:18
+
+# Set working directory
+WORKDIR /app
+
+# Install pnpm
+RUN npm install -g pnpm
+
+# Copy package files
+COPY package.json pnpm-lock.yaml* ./
+
+# Install dependencies
+RUN if [ -f pnpm-lock.yaml ]; then pnpm install --frozen-lockfile; else pnpm install; fi
+
+# Copy the rest of the application
+COPY . .
+
+# Start the application in development mode
+CMD ["pnpm", "dev"]

@@ -11,21 +11,37 @@ const getBaseUrl = () => {
   return `http://localhost:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
 };
 
-export const api = createTRPCReact<AppRouter>();
+// Create a function to initialize the client
+const createTRPCClient = () => {
+  // Skip initialization on server-side if we're not in a browser environment
+  if (typeof window === 'undefined') {
+    return null;
+  }
 
-export const trpcClient = api.createClient({
-  transformer: superjson,
-  links: [
-    loggerLink({
-      enabled: (opts) =>
-        process.env.NODE_ENV === 'development' ||
-        (opts.direction === 'down' && opts.result instanceof Error),
-    }),
-    httpBatchLink({
-      url: `${getBaseUrl()}/api/trpc`,
-    }),
-  ],
-});
+  const client = createTRPCReact<AppRouter>();
+  
+  return client.createClient({
+    transformer: superjson,
+    links: [
+      loggerLink({
+        enabled: (opts) =>
+          process.env.NODE_ENV === 'development' ||
+          (opts.direction === 'down' && opts.result instanceof Error),
+      }),
+      httpBatchLink({
+        url: `${getBaseUrl()}/api/trpc`,
+        // You can add headers here if needed
+        headers() {
+          return {};
+        },
+      }),
+    ],
+  });
+};
+
+export const api = createTRPCReact<AppRouter>();
+// Create the client instance
+export const trpcClient = createTRPCClient();
 
 export type RouterInputs = inferRouterInputs<AppRouter>;
 export type RouterOutputs = inferRouterOutputs<AppRouter>;

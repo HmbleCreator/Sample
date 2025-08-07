@@ -1,2 +1,3 @@
 # Sample
-chatgpt-clone-production-a49f.up.railway.app
+
+🚀 Live Demo: [chatgpt-clone-production-e685.up.railway.app](https://chatgpt-clone-production-e685.up.railway.app/)

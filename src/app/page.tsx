@@ -183,7 +183,7 @@ function HomeContent() {
         <div className="auth-card">
           <h1 className="auth-title">🤖 ChatGPT Clone</h1>
           <p className="auth-subtitle">Your AI-powered conversation companion</p>
-          <p className="mb-4">Experience the power of gemini-2.5-flash-preview-05-20 and imagen-3.0-generate-002</p>
+          <p className="mb-4">Experience the power of gemini-2.0-flash-preview-image-generation and gemini-2.5-flash</p>
           <a href="/api/auth/login" className="auth-button">
             🚀 Get Started
           </a>
@@ -250,7 +250,7 @@ function HomeContent() {
           <div className="header-content">
             <div className="header-title">
               <h5>ChatGPT Clone</h5>
-              <small>Powered by Gemini 2.0 Flash Exp & Imagen 3.0</small>
+              <small>Powered by gemini-2.0-flash-preview-image-generation and gemini-2.5-flash</small>
             </div>
             
             <div className="header-actions">

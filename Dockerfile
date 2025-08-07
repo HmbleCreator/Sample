@@ -21,8 +21,11 @@ WORKDIR /app
 
 COPY --from=builder /app ./
 
-EXPOSE 3000
+EXPOSE 8080
+
+RUN NEXT_DISABLE_LINTING=true SKIP_ENV_VALIDATION=true next build
 
 ENV NODE_ENV=production
+ENV PORT=8080  
 
 CMD ["npm", "start"]

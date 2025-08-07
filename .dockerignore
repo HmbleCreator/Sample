@@ -10,3 +10,4 @@ docker-compose.yml
 .idea
 *.md
 *.log
+tsconfig.tsbuildinfo

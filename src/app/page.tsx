@@ -276,11 +276,7 @@ function HomeContent() {
               </div>
             ) : (
               messages
-                .filter((message): message is Message => 
-                  message && 
-                  message.role && 
-                  (message.role === 'user' || message.role === 'assistant')
-                )
+                .filter((message): message is Message => !!message)
                 .map((message, index) => (
                   <div
                     key={message.id || index}
@@ -291,7 +287,7 @@ function HomeContent() {
                         🤖
                       </div>
                     )}
-                    <div className={`message-bubble ${message.role}`}>
+                    <div className={`message-bubble ${message.role === 'user' ? 'user' : 'assistant'}`}>
                       {message.message_type === 'image' ? (
                         <img 
                           src={message.content.startsWith('data:image/') 

@@ -23,7 +23,6 @@ if !ERRORLEVEL! NEQ 0 (
 echo.
 echo Step 2: Starting the development container...
 echo.
-echo Loading environment variables from .env.local...
 
 :: Create a temporary file to store the environment variables
 set "TEMP_ENV_FILE=%TEMP%\chatgpt-clone-env.tmp"
@@ -40,29 +39,23 @@ for /f "usebackq delims=" %%a in (`.env.local`) do (
     )
 )
 
-:: Add required variables if they don't exist
-findstr /i "^AUTH0_SECRET=" "%TEMP_ENV_FILE%" >nul 2>&1 || (
-    echo AUTH0_SECRET=%RANDOM%%RANDOM%%RANDOM%%RANDOM%>> "%TEMP_ENV_FILE%"
-)
-findstr /i "^NEXTAUTH_SECRET=" "%TEMP_ENV_FILE%" >nul 2>&1 || (
-    echo NEXTAUTH_SECRET=%RANDOM%%RANDOM%%RANDOM%%RANDOM%>> "%TEMP_ENV_FILE%"
-)
-
-echo.
-echo Starting the application with Docker...
+echo Environment variables being used:
 type "%TEMP_ENV_FILE%"
 echo.
 
+echo Starting the application with Docker...
 docker run -it --rm ^
     -p 3000:3000 ^
     --env-file "%TEMP_ENV_FILE%" ^
-    -e AUTH0_BASE_URL=http://localhost:3000 ^
     -e NEXTAUTH_URL=http://localhost:3000 ^
+    -e NEXTAUTH_SECRET=%RANDOM%%RANDOM%%RANDOM%%RANDOM% ^
+    -e HOSTNAME=0.0.0.0 ^
+    -e NODE_ENV=development ^
     -v "%cd%:/app" ^
     -v "/app/node_modules" ^
     -v "%cd%/.next:/app/.next" ^
-    -e NODE_ENV=development ^
     --name chatgpt-clone-dev ^
+    --add-host=host.docker.internal:host-gateway ^
     chatgpt-clone-dev
 
 :: Clean up the temporary file
@@ -76,7 +69,7 @@ if !ERRORLEVEL! NEQ 0 (
     echo 1. Make sure port 3000 is not in use by another application
     echo 2. Check Docker Desktop for any error messages
     echo 3. Try restarting Docker Desktop
-    echo 4. Check if your .env file has all required variables
+    echo 4. Check if your .env.local file has all required variables
     echo.
     pause
     exit /b !ERRORLEVEL!

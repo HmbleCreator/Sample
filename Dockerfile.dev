@@ -1,20 +1,18 @@
-# Use the official Node.js image as the base image
-FROM node:18
+# Use official Node.js image
+FROM node:18-alpine
 
 # Set working directory
 WORKDIR /app
 
-# Install pnpm
-RUN npm install -g pnpm
-
-# Copy package files
-COPY package.json pnpm-lock.yaml* ./
-
 # Install dependencies
-RUN if [ -f pnpm-lock.yaml ]; then pnpm install --frozen-lockfile; else pnpm install; fi
+COPY package*.json ./
+RUN npm install
 
-# Copy the rest of the application
+# Copy the rest of the app
 COPY . .
 
-# Start the application in development mode
-CMD ["pnpm", "dev"]
+# Expose dev port
+EXPOSE 3000
+
+# Start app in dev mode (or use next build if needed)
+CMD ["npx", "next", "dev", "-p", "3000"]
